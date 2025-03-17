@@ -1,3 +1,4 @@
+import { QuizOutput } from '@/server/database/quiz.schema';
 import {
  Card,
  CardContent,
@@ -7,22 +8,27 @@ import {
 } from '../ui/card';
 import { CellAction } from './cell-action';
 
-export default function QuizCard() {
+interface IProps {
+ data: QuizOutput;
+}
+
+export default function QuizCard(props: IProps) {
+ const { data } = props;
+
  return (
   <Card>
    <CardHeader className='flex flex-row justify-between gap-1'>
     <div className='space-y-3'>
-     <CardTitle>Title</CardTitle>
+     <CardTitle>{data.title}</CardTitle>
      <CardDescription className='line-clamp-3'>
-      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ullam labore cum
-      ipsa amet aut ad, illum adipisci praesentium nihil nisi ut voluptate
+      {data.description}
      </CardDescription>
     </div>
-    <CellAction />
+    <CellAction id={data._id} />
    </CardHeader>
    <CardContent className='text-sm text-muted-foreground'>
-    <p>Questions: 17</p>
-    <p>Completions: 17</p>
+    <p>Questions: {data.questions.length}</p>
+    <p>Completions: {data.completions}</p>
    </CardContent>
   </Card>
  );

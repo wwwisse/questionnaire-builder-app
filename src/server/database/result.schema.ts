@@ -1,10 +1,12 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import { SerializableDocumentPOJO } from './types';
 
+const { ObjectId } = Schema;
+
 export interface ResultInput {
- quizId: Schema.Types.ObjectId;
+ quizId: string;
  answers: {
-  questionId: Schema.Types.ObjectId;
+  questionId: string;
   selectedAnswers?: string[];
   answerText?: string;
  }[];
@@ -13,20 +15,19 @@ export interface ResultInput {
 
 export interface ResulOutput extends ResultInput, SerializableDocumentPOJO {}
 
-export interface ResultDocument extends ResultInput, Document {}
+export interface ResultDocument extends Omit<ResulOutput, '_id'>, Document {}
 
 export const resultSchema = new Schema(
  {
   quizId: {
-   type: Schema.Types.ObjectId,
-   required: true,
+   type: ObjectId,
+   ref: 'Quiz',
   },
   answers: [
    {
     questionId: {
-     type: Schema.Types.ObjectId,
-     ref: 'Question',
-     required: true,
+     type: ObjectId,
+     ref: 'Quiz.questions',
     },
     selectedAnswers: {
      type: [String],

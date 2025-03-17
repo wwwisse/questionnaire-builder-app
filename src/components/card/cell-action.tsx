@@ -8,18 +8,28 @@ import {
  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
+import { deleteQuizById } from '@/server/actions';
 import { Edit, MoreVertical, Play, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '../ui/button';
 
-export const CellAction = () => {
+export const CellAction = ({ id }: { id: string }) => {
  const [loading, setLoading] = useState(false);
  const [open, setOpen] = useState(false);
  const router = useRouter();
 
  const onConfirm = async () => {
-  setLoading(true);
+  try {
+   setLoading(true);
+   await deleteQuizById(id);
+  } catch (error) {
+   console.error('Error:', error);
+  } finally {
+   setLoading(false);
+   setOpen(false);
+   router.refresh();
+  }
  };
 
  return (
@@ -39,10 +49,10 @@ export const CellAction = () => {
     </DropdownMenuTrigger>
     <DropdownMenuContent align='end'>
      <DropdownMenuLabel>Action</DropdownMenuLabel>
-     <DropdownMenuItem onClick={() => router.push('/quiz')}>
+     <DropdownMenuItem onClick={() => router.push(`/quiz/${id}`)}>
       <Play className='mr-2 h-4 w-4' /> Run
      </DropdownMenuItem>
-     <DropdownMenuItem onClick={() => router.push('/')}>
+     <DropdownMenuItem onClick={() => router.push(`/quiz/manage/${id}`)}>
       <Edit className='mr-2 h-4 w-4' /> Edit
      </DropdownMenuItem>
      <DropdownMenuItem onClick={() => setOpen(true)}>

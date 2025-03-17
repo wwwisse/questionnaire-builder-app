@@ -1,5 +1,6 @@
 import Footer from '@/components/layout/footer';
 import Header from '@/components/layout/header';
+import { connectDb } from '@/utils/middleware/connect';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
@@ -15,11 +16,12 @@ export const metadata: Metadata = {
  description: 'By www1se',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
  children,
 }: Readonly<{
  children: React.ReactNode;
 }>) {
+ await connectDb();
  return (
   <html lang='en'>
    <body className={`${inter.variable} antialiased`}>

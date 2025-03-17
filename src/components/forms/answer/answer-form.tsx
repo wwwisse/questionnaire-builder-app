@@ -37,7 +37,7 @@ const AnswersForm = ({
  return (
   <div className='space-y-2'>
    {fields.map((field, ansIndex) => (
-    <div key={field.id} className='flex items-center gap-2'>
+    <div key={field.id} className='flex items-end gap-2'>
      <FormField
       control={control}
       name={`questions.${index}.answers.${ansIndex}.text`}

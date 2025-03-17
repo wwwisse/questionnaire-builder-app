@@ -2,7 +2,6 @@ import mongoose, { Document } from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate-v2';
 
 import { QuestionInput, questionSchema } from './question.schema';
-import { ResulOutput, resultSchema } from './result.schema';
 import { SerializableDocumentPOJO } from './types';
 
 const { Schema } = mongoose;
@@ -12,12 +11,11 @@ export interface QuizInput {
  description: string;
  completions: number;
  questions: QuestionInput[];
- results?: ResulOutput[];
 }
 
 export interface QuizOutput extends QuizInput, SerializableDocumentPOJO {}
 
-export interface QuizDocument extends QuizInput, Document {}
+export interface QuizDocument extends Omit<QuizOutput, '_id'>, Document {}
 
 const quizSchema = new Schema(
  {
@@ -29,7 +27,10 @@ const quizSchema = new Schema(
    type: String,
    required: true,
   },
-  results: [resultSchema],
+  completions: {
+   type: Number,
+   default: 0,
+  },
   questions: [questionSchema],
  },
  { timestamps: true }
@@ -37,9 +38,11 @@ const quizSchema = new Schema(
 
 quizSchema.plugin(mongoosePaginate);
 
-const Quiz = mongoose.model<QuizDocument, mongoose.PaginateModel<QuizDocument>>(
- 'Quiz',
- quizSchema
-);
+const Quiz =
+ mongoose.models.Quiz ||
+ mongoose.model<QuizDocument, mongoose.PaginateModel<QuizDocument>>(
+  'Quiz',
+  quizSchema
+ );
 
 export default Quiz;

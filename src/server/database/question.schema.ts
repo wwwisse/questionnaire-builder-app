@@ -1,6 +1,6 @@
 import mongoose, { Document } from 'mongoose';
 
-import { SerializableDocumentPOJO } from '@/database/types';
+import { SerializableDocumentPOJO } from '@/server/database/types';
 import { AnswerInput, answerSchema } from './answer.schema';
 
 const { Schema } = mongoose;
@@ -17,7 +17,9 @@ export interface QuestionOutput
  extends QuestionInput,
   SerializableDocumentPOJO {}
 
-export interface QuestionDocument extends QuestionInput, Document {}
+export interface QuestionDocument
+ extends Omit<QuestionOutput, '_id'>,
+  Document {}
 
 export const questionSchema = new Schema(
  {
@@ -34,6 +36,3 @@ export const questionSchema = new Schema(
  },
  { timestamps: true }
 );
-
-export default mongoose.models.TestResult<QuestionDocument> ||
- mongoose.model<QuestionDocument>('Question', questionSchema);

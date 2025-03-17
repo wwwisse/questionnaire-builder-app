@@ -1,4 +1,4 @@
-import { SerializableDocumentPOJO } from '@/database/types';
+import { SerializableDocumentPOJO } from '@/server/database/types';
 import mongoose, { Document } from 'mongoose';
 
 const { Schema } = mongoose;
@@ -9,7 +9,7 @@ export interface AnswerInput {
 
 export interface AnswerOutput extends AnswerInput, SerializableDocumentPOJO {}
 
-export interface AnswerDocument extends AnswerInput, Document {}
+export interface AnswerDocument extends Omit<AnswerOutput, '_id'>, Document {}
 
 export const answerSchema = new Schema(
  {

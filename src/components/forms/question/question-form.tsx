@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/select';
 import { questionTypes } from '@/constants/data';
 import { Trash } from 'lucide-react';
+import { useEffect } from 'react';
 import { Control, useFormContext } from 'react-hook-form';
 import AnswersForm from '../answer/answer-form';
 import { QuizSchemaType } from '../quiz/type';
@@ -30,8 +31,14 @@ interface IProps {
 
 const QuestionForm = (props: IProps) => {
  const { control, index, loading, remove } = props;
- const { watch } = useFormContext<QuizSchemaType>();
+ const { watch, setValue } = useFormContext<QuizSchemaType>();
  const questionType = watch(`questions.${index}.type`);
+
+ useEffect(() => {
+  if (questionType === 'text') {
+   setValue(`questions.${index}.answers`, []);
+  }
+ }, [questionType, index, setValue]); 
 
  return (
   <div>

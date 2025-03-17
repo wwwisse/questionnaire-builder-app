@@ -26,7 +26,9 @@ import { useState } from 'react';
 
 import { Separator } from '@/components/ui/separator';
 import { defaultQuestion, defaultQuiz } from '@/constants/data';
-import { QuizOutput } from '@/database/quiz.schema';
+import { createQuiz, updateQuiz } from '@/server/actions';
+import { QuizOutput } from '@/server/database/quiz.schema';
+import { useRouter } from 'next/navigation';
 import QuestionForm from '../question/question-form';
 import { quizSchema } from './schema';
 import { QuizSchemaType } from './type';
@@ -38,6 +40,7 @@ interface IProps {
 const QuizForm = (props: IProps) => {
  const { data } = props;
  const [loading, setLoading] = useState(false);
+ const router = useRouter();
 
  const defaultValues = data ? data : defaultQuiz;
 
@@ -54,8 +57,20 @@ const QuizForm = (props: IProps) => {
  const action = data ? 'Edit' : 'Create';
 
  const onSubmit = async (quiz: QuizSchemaType) => {
-  console.log(quiz);
-  setLoading(false);
+  try {
+   setLoading(true);
+   if (data) {
+    await updateQuiz(data._id, quiz);
+   } else {
+    await createQuiz(quiz);
+   }
+   router.push(`/`);
+   router.refresh();
+  } catch (error) {
+   console.error('Error:', error);
+  } finally {
+   setLoading(false);
+  }
  };
 
  const addQuestionField = () => {
