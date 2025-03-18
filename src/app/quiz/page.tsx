@@ -12,11 +12,12 @@ import { QuizOutput } from '@/server/database/quiz.schema';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-export default async function Home({
- searchParams,
-}: {
- searchParams: { page: string };
-}) {
+export default async function Home(
+ props: {
+  searchParams: Promise<{ page: string }>;
+ }
+) {
+ const searchParams = await props.searchParams;
  const page = parseInt(searchParams?.page) || 1;
 
  const data = await getAllQuizzes(page);

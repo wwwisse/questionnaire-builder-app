@@ -50,7 +50,6 @@ const quizSchema = new Schema(
 quizSchema.plugin(mongoosePaginate);
 
 const Quiz =
- mongoose.models.Quiz<QuizDocument> ||
  mongoose.model<QuizDocument, mongoose.PaginateModel<QuizDocument>>(
   'Quiz',
   quizSchema,

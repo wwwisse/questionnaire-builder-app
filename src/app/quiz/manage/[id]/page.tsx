@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation';
 export default async function EditQuizTemplate({
  params,
 }: {
- params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
  const { id } = await params;
  const data = await getQuizById(id);

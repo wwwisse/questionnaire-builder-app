@@ -3,7 +3,11 @@ import PageTitle from '@/components/layout/page-title';
 import { getQuizById } from '@/server/actions';
 import { notFound } from 'next/navigation';
 
-export default async function PassQuiz({ params }: { params: { id: string } }) {
+export default async function PassQuiz({
+ params,
+}: {
+ params: Promise<{ id: string }>;
+}) {
  const { id } = await params;
  const data = await getQuizById(id);
 
