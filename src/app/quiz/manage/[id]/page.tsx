@@ -8,8 +8,8 @@ export default async function EditQuizTemplate({
 }: {
  params: { id: string };
 }) {
-
- const data = await getQuizById(params.id);
+ const { id } = await params;
+ const data = await getQuizById(id);
 
  if (!data.data) {
   return notFound();

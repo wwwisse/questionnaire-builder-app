@@ -35,14 +35,14 @@ const AnswersForm = ({
  };
 
  return (
-  <div className='space-y-2'>
+  <div className='space-y-5'>
    {fields.map((field, ansIndex) => (
-    <div key={field.id} className='flex items-end gap-2'>
+    <div key={field.id} className='flex items-end gap-5'>
      <FormField
       control={control}
       name={`questions.${index}.answers.${ansIndex}.text`}
       render={({ field }) => (
-       <FormItem>
+       <FormItem className='basis-2xs'>
         <FormLabel>Answer</FormLabel>
         <FormControl>
          <Input disabled={loading} {...field} placeholder='Answer text...' />

@@ -1,7 +1,7 @@
 import mongoose, { Document } from 'mongoose';
 
 import { SerializableDocumentPOJO } from '@/server/database/types';
-import { AnswerInput, answerSchema } from './answer.schema';
+import { AnswerOutput, answerSchema } from './answer.schema';
 
 const { Schema } = mongoose;
 
@@ -10,7 +10,7 @@ export type QuestionType = 'text' | 'single_choice' | 'multiple_choice';
 export interface QuestionInput {
  text: string;
  type: QuestionType;
- answers?: AnswerInput[];
+ answers?: AnswerOutput[];
 }
 
 export interface QuestionOutput

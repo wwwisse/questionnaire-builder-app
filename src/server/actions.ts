@@ -1,8 +1,11 @@
 'use server';
 
+import { passingSchema } from '@/components/forms/passing/schema';
+import { PassingSchemaType } from '@/components/forms/passing/type';
 import { quizSchema } from '@/components/forms/quiz/schema';
 import { QuizSchemaType } from '@/components/forms/quiz/type';
 import Quiz, { QuizOutput } from './database/quiz.schema';
+import Result from './database/result.schema';
 
 export type Response<T> = {
  data?: T;
@@ -90,6 +93,35 @@ export const deleteQuizById = async (
   console.error('Error fetching quizzes:', error);
   return {
    success: false,
+  };
+ }
+};
+
+export const passingQuiz = async (
+ quizId: string,
+ answer: PassingSchemaType,
+ duration: number
+) => {
+ try {
+  const resultQuiz = passingSchema.safeParse(answer);
+
+  if (!resultQuiz.success) {
+   return { success: false, errors: resultQuiz.error.format() };
+  }
+
+  const newResult = await Result.create({
+   quizId,
+   answers: resultQuiz.data.answers,
+   duration,
+  });
+  await Quiz.updateOne({ _id: quizId }, { $inc: { completions: 1 } });
+  const processedResult = JSON.parse(JSON.stringify(newResult));
+  return { success: true, data: processedResult };
+ } catch (error) {
+  console.error('Error creating result:', error);
+  return {
+   success: false,
+   message: 'An error occurred while creating the result',
   };
  }
 };

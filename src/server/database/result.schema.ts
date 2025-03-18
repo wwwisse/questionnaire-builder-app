@@ -25,10 +25,6 @@ export const resultSchema = new Schema(
   },
   answers: [
    {
-    questionId: {
-     type: ObjectId,
-     ref: 'Quiz.questions',
-    },
     selectedAnswers: {
      type: [String],
      default: [],

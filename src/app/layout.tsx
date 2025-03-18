@@ -13,7 +13,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
  title: 'Questionnaire Builder App',
- description: 'By www1se',
+ description: 'By Illya @www1se',
 };
 
 export default async function RootLayout({

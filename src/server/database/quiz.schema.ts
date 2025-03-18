@@ -1,7 +1,7 @@
 import mongoose, { Document } from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate-v2';
 
-import { QuestionInput, questionSchema } from './question.schema';
+import { QuestionOutput, questionSchema } from './question.schema';
 import { SerializableDocumentPOJO } from './types';
 
 const { Schema } = mongoose;
@@ -10,7 +10,7 @@ export interface QuizInput {
  title: string;
  description: string;
  completions: number;
- questions: QuestionInput[];
+ questions: QuestionOutput[];
 }
 
 export interface QuizOutput extends QuizInput, SerializableDocumentPOJO {}

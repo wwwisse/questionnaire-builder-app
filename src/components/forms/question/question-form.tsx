@@ -38,7 +38,7 @@ const QuestionForm = (props: IProps) => {
   if (questionType === 'text') {
    setValue(`questions.${index}.answers`, []);
   }
- }, [questionType, index, setValue]); 
+ }, [questionType, index, setValue]);
 
  return (
   <div>
@@ -47,10 +47,10 @@ const QuestionForm = (props: IProps) => {
      control={control}
      name={`questions.${index}.text`}
      render={({ field }) => (
-      <FormItem>
+      <FormItem className='basis-2xs'>
        <FormLabel>Question title</FormLabel>
        <FormControl>
-        <Input className='w-md' disabled={loading} {...field} />
+        <Input disabled={loading} {...field} />
        </FormControl>
        <FormMessage />
       </FormItem>
@@ -86,7 +86,7 @@ const QuestionForm = (props: IProps) => {
      )}
     />
     {index > 0 && (
-     <div className='flex items-center pt-3'>
+     <div className='flex items-end pt-3'>
       <Button size='sm' variant='ghost' onClick={() => remove(index)}>
        <Trash className='h-4 w-4' />
       </Button>
