@@ -4,7 +4,7 @@ import { passingSchema } from '@/components/forms/passing/schema';
 import { PassingSchemaType } from '@/components/forms/passing/type';
 import { quizSchema } from '@/components/forms/quiz/schema';
 import { QuizSchemaType } from '@/components/forms/quiz/type';
-import Quiz, { QuizOutput } from './database/quiz.schema';
+import Quiz, { QuizOutput, QuizyWithPagination } from './database/quiz.schema';
 import Result, { ResulOutput, ResultWithQuiz } from './database/result.schema';
 
 export type Response<T> = {
@@ -26,7 +26,7 @@ export const createQuiz = async (
    };
   }
   const newQuiz = await Quiz.create(parsedQuiz.data);
-  const quizData = newQuiz.toString();
+  const quizData = JSON.parse(JSON.stringify(newQuiz));
   return { success: true, data: quizData };
  } catch (error) {
   console.error('Error creating quiz:', error);
@@ -62,9 +62,16 @@ export const updateQuiz = async (
  }
 };
 
-export const getAllQuizzes = async (): Promise<Response<QuizOutput[]>> => {
+export const getAllQuizzes = async (
+ page: number
+): Promise<Response<QuizyWithPagination>> => {
  try {
-  const quizzes = await Quiz.find().lean();
+  const options = {
+   page,
+   limit: 6,
+   sort: { createdAt: -1 },
+  };
+  const quizzes = await Quiz.paginate({}, options);
   const processedQuizzes = JSON.parse(JSON.stringify(quizzes));
   return { success: true, data: processedQuizzes };
  } catch (error) {

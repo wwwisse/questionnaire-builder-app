@@ -13,6 +13,17 @@ export interface QuizInput {
  questions: QuestionOutput[];
 }
 
+export interface QuizyWithPagination {
+ docs: QuizOutput[];
+ totalDocs: number;
+ limit: number;
+ totalPages: number;
+ page: number;
+ pagingCounter: number;
+ hasPrevPage: boolean;
+ hasNextPage: boolean;
+}
+
 export interface QuizOutput extends QuizInput, SerializableDocumentPOJO {}
 
 export interface QuizDocument extends Omit<QuizOutput, '_id'>, Document {}
@@ -39,10 +50,11 @@ const quizSchema = new Schema(
 quizSchema.plugin(mongoosePaginate);
 
 const Quiz =
- mongoose.models.Quiz ||
+ mongoose.models.Quiz<QuizDocument> ||
  mongoose.model<QuizDocument, mongoose.PaginateModel<QuizDocument>>(
   'Quiz',
-  quizSchema
+  quizSchema,
+  'quiz'
  );
 
 export default Quiz;

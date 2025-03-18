@@ -42,7 +42,7 @@ const ResultCard = (props: IProps) => {
     </div>
    </CardContent>
    <CardFooter className='text-sm text-muted-foreground'>
-    <Link href='/'>
+    <Link href='/quiz'>
      <Button>Go home</Button>
     </Link>
    </CardFooter>

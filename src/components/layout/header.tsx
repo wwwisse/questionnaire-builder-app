@@ -5,7 +5,7 @@ export default function Header() {
   <header className=''>
    <div className='container py-14'>
     <h1 className='text-center font-bold text-3xl text-primary'>
-     <Link href='/'>Quiz catalog</Link>
+     <Link href='/quiz'>Quiz catalog</Link>
     </h1>
    </div>
   </header>

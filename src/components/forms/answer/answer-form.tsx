@@ -27,7 +27,7 @@ const AnswersForm = ({
  });
 
  const addAnswerField = () => {
-  if (fields.length < 3) append(defaultAnswer);
+  if (fields.length < 4) append(defaultAnswer);
  };
 
  const removeAnswerField = (index: number) => {
