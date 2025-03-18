@@ -1,18 +1,18 @@
+import NotFound from '@/app/not-found';
 import ResultCard from '@/components/cards/result-card';
 import PageTitle from '@/components/layout/page-title';
 import { getResultById } from '@/server/actions';
-import { notFound } from 'next/navigation';
 
 export default async function ResultQuiz({
  params,
 }: {
-  params: Promise<{ id: string }>;
+ params: Promise<{ id: string }>;
 }) {
  const { id } = await params;
  const data = await getResultById(id);
 
  if (!data.data) {
-  return notFound();
+  return <NotFound />;
  }
 
  return (

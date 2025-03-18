@@ -1,7 +1,7 @@
+import NotFound from '@/app/not-found';
 import PassingForm from '@/components/forms/passing/passing-form';
 import PageTitle from '@/components/layout/page-title';
 import { getQuizById } from '@/server/actions';
-import { notFound } from 'next/navigation';
 
 export default async function PassQuiz({
  params,
@@ -12,7 +12,7 @@ export default async function PassQuiz({
  const data = await getQuizById(id);
 
  if (!data.data) {
-  return notFound();
+  return <NotFound />;
  }
 
  return (

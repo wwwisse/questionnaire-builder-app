@@ -10,20 +10,18 @@ import {
 import { getAllQuizzes } from '@/server/actions';
 import { QuizOutput } from '@/server/database/quiz.schema';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import NotFound from '../not-found';
 
-export default async function Home(
- props: {
-  searchParams: Promise<{ page: string }>;
- }
-) {
+export default async function Home(props: {
+ searchParams: Promise<{ page: string }>;
+}) {
  const searchParams = await props.searchParams;
  const page = parseInt(searchParams?.page) || 1;
 
  const data = await getAllQuizzes(page);
 
  if (!data.data) {
-  return notFound();
+  return <NotFound />;
  }
 
  const quizCard = data.data?.docs.map((quiz: QuizOutput) => (
