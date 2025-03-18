@@ -5,19 +5,25 @@ import { PassingSchemaType } from '@/components/forms/passing/type';
 import { quizSchema } from '@/components/forms/quiz/schema';
 import { QuizSchemaType } from '@/components/forms/quiz/type';
 import Quiz, { QuizOutput } from './database/quiz.schema';
-import Result from './database/result.schema';
+import Result, { ResulOutput, ResultWithQuiz } from './database/result.schema';
 
 export type Response<T> = {
  data?: T;
  success?: boolean;
+ message?: string;
 };
 
-export const createQuiz = async (quiz: QuizSchemaType) => {
+export const createQuiz = async (
+ quiz: QuizSchemaType
+): Promise<Response<QuizOutput>> => {
  try {
   const parsedQuiz = quizSchema.safeParse(quiz);
 
   if (!parsedQuiz.success) {
-   return { success: false, errors: parsedQuiz.error.format() };
+   return {
+    success: false,
+    message: 'The quiz data is invalid or incomplete.',
+   };
   }
   const newQuiz = await Quiz.create(parsedQuiz.data);
   const quizData = newQuiz.toString();
@@ -26,26 +32,32 @@ export const createQuiz = async (quiz: QuizSchemaType) => {
   console.error('Error creating quiz:', error);
   return {
    success: false,
-   message: 'An error occurred while creating the quiz',
+   message: 'Something went wrong while creating the quiz',
   };
  }
 };
 
-export const updateQuiz = async (id: string, quiz: QuizSchemaType) => {
+export const updateQuiz = async (
+ id: string,
+ quiz: QuizSchemaType
+): Promise<Response<QuizOutput>> => {
  try {
   const parsedQuiz = quizSchema.safeParse(quiz);
 
   if (!parsedQuiz.success) {
-   return { success: false, errors: parsedQuiz.error.format() };
+   return {
+    success: false,
+    message: 'The quiz data is invalid or incomplete.',
+   };
   }
   const newQuiz = await Quiz.updateOne({ _id: id }, parsedQuiz.data);
-  const quizData = newQuiz.toString();
+  const quizData = JSON.parse(JSON.stringify(newQuiz));
   return { success: true, data: quizData };
  } catch (error) {
   console.error('Error updating quiz:', error);
   return {
    success: false,
-   message: 'An error occurred while updating the quiz',
+   message: 'Something went wrong while updating the quiz',
   };
  }
 };
@@ -59,6 +71,7 @@ export const getAllQuizzes = async (): Promise<Response<QuizOutput[]>> => {
   console.error('Error fetching quizzes:', error);
   return {
    success: false,
+   message: 'Something went wrong while getting the quiz',
   };
  }
 };
@@ -76,6 +89,7 @@ export const getQuizById = async (
   console.error('Error fetching quizzes:', error);
   return {
    success: false,
+   message: 'Something went wrong while getting quiz by id',
   };
  }
 };
@@ -93,6 +107,7 @@ export const deleteQuizById = async (
   console.error('Error fetching quizzes:', error);
   return {
    success: false,
+   message: 'Something went wrong while deleting the quiz',
   };
  }
 };
@@ -101,12 +116,12 @@ export const passingQuiz = async (
  quizId: string,
  answer: PassingSchemaType,
  duration: number
-) => {
+): Promise<Response<ResulOutput>> => {
  try {
   const resultQuiz = passingSchema.safeParse(answer);
 
   if (!resultQuiz.success) {
-   return { success: false, errors: resultQuiz.error.format() };
+   return { success: false };
   }
 
   const newResult = await Result.create({
@@ -121,7 +136,25 @@ export const passingQuiz = async (
   console.error('Error creating result:', error);
   return {
    success: false,
-   message: 'An error occurred while creating the result',
+   message: 'Something went wrong while passing the quiz',
+  };
+ }
+};
+
+export const getResultById = async (
+ id: string
+): Promise<Response<ResultWithQuiz>> => {
+ try {
+  const quizzes = await Result.findOne({
+   _id: id,
+  }).populate('quizId');
+  const processedQuizzes = JSON.parse(JSON.stringify(quizzes));
+  return { success: true, data: processedQuizzes };
+ } catch (error) {
+  console.error('Error fetching quizzes:', error);
+  return {
+   success: false,
+   message: 'Something went wrong while getting result',
   };
  }
 };

@@ -1,11 +1,12 @@
 import mongoose, { Document, Schema } from 'mongoose';
+import { QuizOutput } from './quiz.schema';
 import { SerializableDocumentPOJO } from './types';
 
 const { ObjectId } = Schema;
 
 export interface ResultInput {
- quizId: string;
  answers: {
+  _id: string;
   questionId: string;
   selectedAnswers?: string[];
   answerText?: string;
@@ -13,7 +14,13 @@ export interface ResultInput {
  duration: number;
 }
 
-export interface ResulOutput extends ResultInput, SerializableDocumentPOJO {}
+export interface ResulOutput extends ResultInput, SerializableDocumentPOJO {
+ quizId: string;
+}
+
+export interface ResultWithQuiz extends ResultInput, SerializableDocumentPOJO {
+ quizId: QuizOutput;
+}
 
 export interface ResultDocument extends Omit<ResulOutput, '_id'>, Document {}
 

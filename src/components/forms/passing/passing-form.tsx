@@ -60,9 +60,8 @@ const PassingForm = (props: IProps) => {
  const onSubmit = async (quiz: PassingSchemaType) => {
   try {
    setLoading(true);
-   await passingQuiz(data._id, quiz, timeSpent);
-
-   router.push(`/`);
+   const result = await passingQuiz(data._id, quiz, timeSpent);
+   router.push(`result/${result.data?._id}`);
   } catch (error) {
    console.error('Error:', error);
   } finally {

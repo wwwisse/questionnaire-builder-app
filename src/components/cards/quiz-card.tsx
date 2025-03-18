@@ -12,7 +12,7 @@ interface IProps {
  data: QuizOutput;
 }
 
-export default function QuizCard(props: IProps) {
+const QuizCard = (props: IProps) => {
  const { data } = props;
 
  return (
@@ -33,3 +33,5 @@ export default function QuizCard(props: IProps) {
   </Card>
  );
 }
+
+export default QuizCard;

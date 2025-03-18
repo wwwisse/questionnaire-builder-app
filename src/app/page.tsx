@@ -1,4 +1,4 @@
-import QuizCard from '@/components/card/quiz-card';
+import QuizCard from '@/components/cards/quiz-card';
 import { Button } from '@/components/ui/button';
 import { getAllQuizzes } from '@/server/actions';
 import { QuizOutput } from '@/server/database/quiz.schema';
