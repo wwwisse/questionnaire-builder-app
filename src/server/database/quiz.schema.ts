@@ -49,12 +49,6 @@ const quizSchema = new Schema(
 
 quizSchema.plugin(aggregatePaginate);
 
-const Quiz =
- mongoose.models.Quiz<QuizDocument> ||
- mongoose.model<QuizDocument, mongoose.PaginateModel<QuizDocument>>(
-  'Quiz',
-  quizSchema,
-  'quiz'
- );
+const Quiz = mongoose.model('Quiz', quizSchema, 'quiz');
 
 export default Quiz;

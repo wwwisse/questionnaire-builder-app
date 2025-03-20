@@ -53,6 +53,24 @@ const PassingForm = (props: IProps) => {
  });
 
  useEffect(() => {
+  const item = sessionStorage.getItem(`quiz-${data._id}`);
+  if (item) {
+   const parsedItem = JSON.parse(item);
+   form.reset(parsedItem);
+  }
+ }, []);
+
+ useEffect(() => {
+  const subscription = form.watch((value) => {
+   const save = {
+    answers: value.answers,
+   };
+   sessionStorage.setItem(`quiz-${data._id}`, JSON.stringify(save));
+  });
+  return () => subscription.unsubscribe();
+ }, [data._id, form]);
+
+ useEffect(() => {
   const interval = setInterval(() => setTimeSpent((prev) => prev + 1), 1000);
   return () => clearInterval(interval);
  }, []);
@@ -110,6 +128,7 @@ const PassingForm = (props: IProps) => {
             <FormItem>
              <FormControl>
               <RadioGroup
+               value={field.value?.[0]}
                disabled={loading}
                onValueChange={(value) => field.onChange([value])}
               >
