@@ -19,3 +19,9 @@ export const questionTypes = [
  { id: '2', value: 'single_choice', name: 'Single choice' },
  { id: '3', value: 'multiple_choice', name: 'Multiple Choice' },
 ];
+
+export const defaultSort = [
+ { id: '1', label: 'Title', value: 'title' },
+ { id: '2', label: 'Questions', value: 'questions' },
+ { id: '3', label: 'Completions', value: 'completions' },
+];
