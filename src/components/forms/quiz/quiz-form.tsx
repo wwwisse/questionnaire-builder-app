@@ -28,6 +28,7 @@ import { Separator } from '@/components/ui/separator';
 import { defaultQuestion, defaultQuiz } from '@/constants/data';
 import { createQuiz, updateQuiz } from '@/server/actions';
 import { QuizOutput } from '@/server/database/quiz.schema';
+import { DragDropContext, Droppable, DropResult } from '@hello-pangea/dnd';
 import { useRouter } from 'next/navigation';
 import QuestionForm from '../question/question-form';
 import { quizSchema } from './schema';
@@ -49,7 +50,7 @@ const QuizForm = (props: IProps) => {
   defaultValues,
  });
 
- const { fields, append, remove } = useFieldArray({
+ const { fields, append, remove, move } = useFieldArray({
   control: form.control,
   name: 'questions',
  });
@@ -91,6 +92,13 @@ const QuizForm = (props: IProps) => {
     remove={removeQuestionField}
    />
   ));
+ };
+
+ const handleDragEnd = (result: DropResult) => {
+  const { source, destination } = result;
+  if (!destination) return;
+
+  move(source.index, destination.index);
  };
 
  return (
@@ -146,7 +154,22 @@ const QuizForm = (props: IProps) => {
         )}
        />
        <Separator className='my-9' />
-       <div>{renderQuestionList()}</div>
+       <div>
+        <DragDropContext onDragEnd={handleDragEnd}>
+         <Droppable droppableId='questionsList'>
+          {(provided) => (
+           <div
+            className='space-y-8'
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+           >
+            {renderQuestionList()}
+            {provided.placeholder}
+           </div>
+          )}
+         </Droppable>
+        </DragDropContext>
+       </div>
       </div>
      </form>
     </Form>
