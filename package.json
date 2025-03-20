@@ -24,7 +24,7 @@
   "clsx": "^2.1.1",
   "lucide-react": "^0.482.0",
   "mongoose": "^8.12.1",
-  "mongoose-paginate-v2": "^1.9.0",
+  "mongoose-aggregate-paginate-v2": "^1.1.4",
   "next": "15.2.2",
   "next-safe-action": "^7.10.4",
   "react": "^19.0.0",

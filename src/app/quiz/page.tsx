@@ -7,18 +7,20 @@ import {
  PaginationNext,
  PaginationPrevious,
 } from '@/components/ui/pagination';
+import SortSelect from '@/components/ui/sort-select';
 import { getAllQuizzes } from '@/server/actions';
 import { QuizOutput } from '@/server/database/quiz.schema';
 import Link from 'next/link';
 import NotFound from '../not-found';
 
 export default async function Home(props: {
- searchParams: Promise<{ page: string }>;
+ searchParams: Promise<{ page: string; sort: string }>;
 }) {
  const searchParams = await props.searchParams;
  const page = parseInt(searchParams?.page) || 1;
+ const sort = searchParams?.sort || 'title';
 
- const data = await getAllQuizzes(page);
+ const data = await getAllQuizzes(page, sort);
 
  if (!data.data) {
   return <NotFound />;
@@ -30,10 +32,11 @@ export default async function Home(props: {
 
  return (
   <div className='space-y-10'>
-   <div className='flex justify-center'>
+   <div className='flex flex-col items-center gap-y-7'>
     <Link href='/quiz/manage'>
      <Button>Add quiz</Button>
     </Link>
+    <SortSelect selected={sort} />
    </div>
    {quizCard.length ? (
     <>

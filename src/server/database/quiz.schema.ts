@@ -1,5 +1,5 @@
 import mongoose, { Document } from 'mongoose';
-import mongoosePaginate from 'mongoose-paginate-v2';
+import aggregatePaginate from 'mongoose-aggregate-paginate-v2';
 
 import { QuestionOutput, questionSchema } from './question.schema';
 import { SerializableDocumentPOJO } from './types';
@@ -47,9 +47,10 @@ const quizSchema = new Schema(
  { timestamps: true }
 );
 
-quizSchema.plugin(mongoosePaginate);
+quizSchema.plugin(aggregatePaginate);
 
 const Quiz =
+ mongoose.models.Quiz<QuizDocument> ||
  mongoose.model<QuizDocument, mongoose.PaginateModel<QuizDocument>>(
   'Quiz',
   quizSchema,

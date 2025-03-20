@@ -5,6 +5,7 @@ import { PassingSchemaType } from '@/components/forms/passing/type';
 import { quizSchema } from '@/components/forms/quiz/schema';
 import { QuizSchemaType } from '@/components/forms/quiz/type';
 import { connectDb } from '@/utils/middleware/connect';
+import { allowedSortFields } from '@/utils/sortFields';
 import Quiz, { QuizOutput, QuizyWithPagination } from './database/quiz.schema';
 import Result, { ResulOutput, ResultWithQuiz } from './database/result.schema';
 
@@ -66,16 +67,29 @@ export const updateQuiz = async (
 };
 
 export const getAllQuizzes = async (
- page: number
+ page: number,
+ sortValue: string
 ): Promise<Response<QuizyWithPagination>> => {
  try {
+  await connectDb();
+
+  const aggregateQuery = Quiz.aggregate([
+   {
+    $addFields: {
+     questionsCount: { $size: '$questions' },
+    },
+   },
+  ]);
+
+  const sortOption = allowedSortFields[sortValue] || { title: 1 };
+
   const options = {
    page,
    limit: 6,
-   sort: { createdAt: -1 },
+   sort: sortOption,
   };
-  await connectDb();
-  const quizzes = await Quiz.paginate({}, options);
+
+  const quizzes = await Quiz.aggregatePaginate(aggregateQuery, options);
   const processedQuizzes = JSON.parse(JSON.stringify(quizzes));
   return { success: true, data: processedQuizzes };
  } catch (error) {
